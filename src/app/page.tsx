@@ -274,7 +274,7 @@ export default function HomePage() {
           </span>
         </div>
         <a
-          href="https://ko-fi.com"
+          href="https://ko-fi.com/ger430056"
           target="_blank"
           rel="noopener noreferrer"
           className="py-2 px-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-xs shrink-0 flex items-center gap-1.5 transition-colors"
