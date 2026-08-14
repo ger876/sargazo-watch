@@ -128,3 +128,51 @@ export async function voteReport(reportId: string, isAccurate: boolean): Promise
 
   return true;
 }
+
+/**
+ * Deletes a report by ID
+ */
+export async function deleteReport(reportId: string): Promise<boolean> {
+  const index = localReports.findIndex((r) => r.id === reportId);
+  if (index !== -1) {
+    localReports.splice(index, 1);
+  }
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { error } = await supabase.from('reports').delete().eq('id', reportId);
+      return !error;
+    } catch (e) {
+      console.warn('Delete report error', e);
+    }
+  }
+  return true;
+}
+
+/**
+ * Local auth user state helpers
+ */
+export function getCurrentUser() {
+  if (typeof window === 'undefined') return null;
+  const stored = localStorage.getItem('sargazo_watch_user');
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {}
+  }
+  return null;
+}
+
+export function setCurrentUser(user: { email?: string; name: string; isGuest?: boolean }) {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('sargazo_watch_user', JSON.stringify({
+    ...user,
+    trustScore: 15,
+    joinedAt: new Date().toLocaleDateString('es-MX', { month: 'short', year: 'numeric' })
+  }));
+}
+
+export function logoutUser() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem('sargazo_watch_user');
+}
